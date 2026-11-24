@@ -2,26 +2,45 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-html {
-  scroll-behavior: smooth;
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 
-body {
-  font-family: 'Sora', sans-serif;
-  overflow-x: hidden;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply font-sans antialiased bg-white text-slate-900 dark:bg-slate-950 dark:text-white;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    @apply bg-violet-600 text-white;
+  }
+
+  /* Smooth theme switching. Kept in the base layer so utilities like transition-transform still win. */
+  * {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-violet-500;
+  }
 }
 
-/* Custom modern scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
   background: transparent;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: #09090b;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -32,73 +51,19 @@ body {
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: #3f3f46;
-  border: 2px solid #09090b;
+  background: #334155;
+  border: 2px solid #020617;
   background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a855f7;
+  background: #8b5cf6;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #a855f7;
-  border: 2px solid #09090b;
-  background-clip: padding-box;
-}
-
-/* Smooth dark mode transition */
-* {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-}
-
-/* Glassmorphism custom classes */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.dark .glass-panel {
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Floating custom animations */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.animate-float-slow {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-medium {
-  animation: float 4s ease-in-out infinite;
-}
-
-/* Animated aura blobs */
-.aura-blob {
-  position: absolute;
-  filter: blur(80px);
-  border-radius: 9999px;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.15;
-}
-
-.dark .aura-blob {
-  opacity: 0.25;
 }
